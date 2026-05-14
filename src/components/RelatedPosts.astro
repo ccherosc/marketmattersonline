@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import PostCard from './PostCard.astro';
+
+interface Props {
+  currentSlug: string;
+  category: string;
+}
+
+const { currentSlug, category } = Astro.props;
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const related = allPosts
+  .filter(p => p.slug !== currentSlug && p.data.category === category)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+
+// Fall back to latest posts from any category if not enough in same category
+const fallback = related.length < 3
+  ? allPosts
+      .filter(p => p.slug !== currentSlug && !related.find(r => r.slug === p.slug))
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+      .slice(0, 3 - related.length)
+  : [];
+
+const posts = [...related, ...fallback];
+---
+
+{posts.length > 0 && (
+  <section class="border-t border-slate-200 pt-10 mt-2">
+    <h2 class="text-xl font-bold text-slate-900 mb-6">Keep Reading</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      {posts.map(post => <PostCard post={post} />)}
+    </div>
+  </section>
+)}

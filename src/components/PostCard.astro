@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { getCategoryName, getCategoryBadgeClass } from '../data/categories';
-import { formatDateShort } from '../utils/formatDate';
+import { formatDateShort, formatRelativeDate, formatISODate } from '../utils/formatDate';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -9,10 +9,14 @@ interface Props {
 }
 
 const { post, variant = 'default' } = Astro.props;
-const { title, description, pubDate, category, readTime, heroImage } = post.data;
+const { title, description, pubDate, category, readTime, heroImage, author } = post.data;
 const categoryName = getCategoryName(category);
 const badgeClass = getCategoryBadgeClass(category);
 const url = `/blog/${post.slug}/`;
+
+// Show relative date for posts under 60 days old, full date otherwise
+const displayDate = formatRelativeDate(pubDate);
+const authorShort = author.replace('Market Matters Team', 'MMO Team');
 
 const placeholderGradients: Record<string, string> = {
   'marketing-playbook': 'from-blue-600 to-blue-800',
@@ -24,7 +28,18 @@ const placeholderGradients: Record<string, string> = {
   'marketing-news': 'from-slate-600 to-slate-800',
 };
 
+const categoryIcons: Record<string, string> = {
+  'ai-automation': '🤖',
+  'tools-reviews': '🔧',
+  'seo-search': '🔍',
+  'local-growth-lab': '📍',
+  'templates-downloads': '📥',
+  'marketing-news': '📰',
+  'marketing-playbook': '📋',
+};
+
 const gradient = placeholderGradients[category] ?? 'from-slate-600 to-slate-800';
+const icon = categoryIcons[category] ?? '📋';
 ---
 
 {variant === 'featured' ? (
@@ -34,7 +49,7 @@ const gradient = placeholderGradients[category] ?? 'from-slate-600 to-slate-800'
         <img src={heroImage} alt={title} class="w-full h-48 md:h-full object-cover" loading="lazy" />
       ) : (
         <div class={`w-full h-48 md:h-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
-          <span class="text-white text-4xl opacity-50">{post.data.category === 'ai-automation' ? '🤖' : post.data.category === 'tools-reviews' ? '🔧' : '📋'}</span>
+          <span class="text-white text-4xl opacity-50">{icon}</span>
         </div>
       )}
     </a>
@@ -50,17 +65,29 @@ const gradient = placeholderGradients[category] ?? 'from-slate-600 to-slate-800'
         <p class="text-slate-600 text-sm line-clamp-3">{description}</p>
       </div>
       <div class="flex items-center justify-between mt-4 pt-4 border-t border-slate-100">
-        <time class="text-xs text-slate-500">{formatDateShort(pubDate)}</time>
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+          <time datetime={formatISODate(pubDate)}>{displayDate}</time>
+          <span class="text-slate-300">·</span>
+          <span>{authorShort}</span>
+        </div>
         <a href={url} class="text-sm font-medium text-blue-600 hover:text-blue-700">Read more →</a>
       </div>
     </div>
   </article>
 ) : variant === 'compact' ? (
-  <article class="flex gap-3 group py-3 border-b border-slate-100 last:border-0">
-    <a href={url} class="flex-1">
-      <span class={`category-badge ${badgeClass} text-xs mb-1 inline-block`}>{categoryName}</span>
-      <h3 class="font-semibold text-slate-800 text-sm leading-snug group-hover:text-blue-600 transition-colors">{title}</h3>
-      <time class="text-xs text-slate-500 mt-1 block">{formatDateShort(pubDate)}</time>
+  <article class="group py-3 border-b border-slate-100 last:border-0">
+    <a href={url} class="block">
+      <span class={`category-badge ${badgeClass} mb-1 inline-block`}>{categoryName}</span>
+      <h3 class="font-semibold text-slate-800 text-sm leading-snug group-hover:text-blue-600 transition-colors mb-1">{title}</h3>
+      <div class="flex items-center gap-2 text-xs text-slate-500">
+        <time datetime={formatISODate(pubDate)}>{displayDate}</time>
+        {readTime && (
+          <>
+            <span class="text-slate-300">·</span>
+            <span>{readTime}</span>
+          </>
+        )}
+      </div>
     </a>
   </article>
 ) : (
@@ -70,9 +97,7 @@ const gradient = placeholderGradients[category] ?? 'from-slate-600 to-slate-800'
         <img src={heroImage} alt={title} class="w-full h-44 object-cover" loading="lazy" />
       ) : (
         <div class={`w-full h-44 bg-gradient-to-br ${gradient} flex items-center justify-center`}>
-          <span class="text-white text-3xl opacity-40">
-            {category === 'ai-automation' ? '🤖' : category === 'tools-reviews' ? '🔧' : category === 'seo-search' ? '🔍' : category === 'local-growth-lab' ? '📍' : '📋'}
-          </span>
+          <span class="text-white text-3xl opacity-40">{icon}</span>
         </div>
       )}
     </a>
@@ -86,7 +111,11 @@ const gradient = placeholderGradients[category] ?? 'from-slate-600 to-slate-800'
       </h2>
       <p class="text-sm text-slate-600 line-clamp-2 flex-1">{description}</p>
       <div class="flex items-center justify-between mt-4 pt-3 border-t border-slate-100">
-        <time class="text-xs text-slate-500">{formatDateShort(pubDate)}</time>
+        <div class="flex items-center gap-1.5 text-xs text-slate-500">
+          <time datetime={formatISODate(pubDate)}>{displayDate}</time>
+          <span class="text-slate-300">·</span>
+          <span>{authorShort}</span>
+        </div>
         <a href={url} class="text-xs font-medium text-blue-600 hover:text-blue-700">Read →</a>
       </div>
     </div>

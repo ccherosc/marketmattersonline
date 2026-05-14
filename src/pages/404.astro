@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page Not Found — Market Matters Online"
+  description="The page you're looking for doesn't exist. Browse our marketing guides and resources below."
+>
+  <section class="bg-slate-900 text-white py-20">
+    <div class="site-container text-center">
+      <p class="text-blue-400 font-mono text-sm font-semibold tracking-widest mb-4">404</p>
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">Page not found</h1>
+      <p class="text-slate-300 text-lg mb-8 max-w-md mx-auto">
+        This page doesn't exist — or it moved. Try the blog or start from the homepage.
+      </p>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href="/" class="btn-primary">Go to Homepage</a>
+        <a href="/blog/" class="btn-ghost-white">Browse the Blog</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad bg-white">
+    <div class="site-container text-center">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Popular places to start</h2>
+      <div class="flex flex-wrap gap-3 justify-center">
+        <a href="/start-here/" class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 text-sm font-medium transition-colors">Start Here</a>
+        <a href="/tools-reviews/" class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 text-sm font-medium transition-colors">Tools & Reviews</a>
+        <a href="/category/marketing-playbook/" class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 text-sm font-medium transition-colors">Marketing Playbook</a>
+        <a href="/category/ai-automation/" class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 text-sm font-medium transition-colors">AI & Automation</a>
+        <a href="/category/local-growth-lab/" class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 text-sm font-medium transition-colors">Local Growth Lab</a>
+        <a href="/rss.xml" class="px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 text-sm font-medium transition-colors">RSS Feed</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

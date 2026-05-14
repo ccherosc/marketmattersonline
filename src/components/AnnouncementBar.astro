@@ -1,0 +1,46 @@
+---
+// Edit these three lines to change what the bar says.
+// Bump VERSION (e.g. "v2") to force the bar to re-show for users who previously dismissed it.
+const MESSAGE = "📩 Free download: Local Marketing Quickstart Checklist — get it when you subscribe";
+const LINK_TEXT = "Get it free →";
+const LINK_HREF = "/#newsletter";
+const VERSION = "v1";
+---
+
+<div
+  id="announcement-bar"
+  class="bg-slate-800 border-b border-slate-700 text-white py-2 px-4 text-center text-sm relative"
+>
+  <p class="pr-8">
+    {MESSAGE}
+    {LINK_TEXT && LINK_HREF && (
+      <a href={LINK_HREF} class="font-semibold text-blue-300 hover:text-blue-200 underline ml-1.5 transition-colors">
+        {LINK_TEXT}
+      </a>
+    )}
+  </p>
+  <button
+    id="dismiss-announcement"
+    aria-label="Dismiss announcement"
+    class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors p-1 rounded"
+  >
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+</div>
+
+<script define:vars={{ VERSION }}>
+  const KEY = `mmo-announcement-${VERSION}`;
+  const bar = document.getElementById('announcement-bar');
+  const btn = document.getElementById('dismiss-announcement');
+
+  if (localStorage.getItem(KEY)) {
+    bar?.remove();
+  }
+
+  btn?.addEventListener('click', () => {
+    bar?.style.setProperty('display', 'none');
+    localStorage.setItem(KEY, '1');
+  });
+</script>

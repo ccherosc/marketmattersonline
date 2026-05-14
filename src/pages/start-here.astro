@@ -1,0 +1,123 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const paths = [
+  {
+    title: 'Build Your First Marketing System',
+    description: 'New to marketing or starting from scratch? Start here.',
+    icon: '🚀',
+    posts: sortedPosts.filter(p =>
+      ['marketing-playbook', 'local-growth-lab'].includes(p.data.category)
+    ).slice(0, 3),
+  },
+  {
+    title: 'Evaluate & Choose the Right Tools',
+    description: 'Not sure which CRM, automation tool, or AI platform to use?',
+    icon: '🔧',
+    posts: sortedPosts.filter(p => p.data.category === 'tools-reviews').slice(0, 3),
+  },
+  {
+    title: 'Get Found Online (SEO & Local)',
+    description: 'Want more traffic from Google without paid ads?',
+    icon: '🔍',
+    posts: sortedPosts.filter(p =>
+      ['seo-search', 'local-growth-lab'].includes(p.data.category)
+    ).slice(0, 3),
+  },
+  {
+    title: 'Automate & Use AI in Your Marketing',
+    description: 'Ready to save time and scale with AI tools?',
+    icon: '🤖',
+    posts: sortedPosts.filter(p => p.data.category === 'ai-automation').slice(0, 3),
+  },
+];
+
+const breadcrumbs = [{ label: 'Start Here' }];
+---
+
+<PageLayout
+  title="Start Here — Market Matters Online"
+  description="New to Market Matters Online? This is where to start. Find the right path based on where you are in your marketing journey."
+  breadcrumbs={breadcrumbs}
+>
+  <!-- Page header -->
+  <section class="bg-slate-900 text-white py-14">
+    <div class="site-container">
+      <div class="max-w-2xl">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Start Here</h1>
+        <p class="text-xl text-slate-300 leading-relaxed">
+          Not sure where to begin? This page is your map. Pick the path that fits where you are right now.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What this site is -->
+  <section class="section-pad-sm bg-white border-b border-slate-200">
+    <div class="site-container">
+      <div class="max-w-3xl">
+        <h2 class="text-2xl font-bold text-slate-900 mb-4">What Market Matters Online is (and isn't)</h2>
+        <div class="prose prose-slate">
+          <p>
+            This is not a generic marketing blog that publishes 3,000-word SEO articles just to rank on Google. This is a curated resource for practical marketers and business owners who need <strong>usable information, not more content to scroll through.</strong>
+          </p>
+          <p>
+            Every post answers one of three questions:
+          </p>
+          <ul>
+            <li><strong>What changed?</strong> — The latest tools, tactics, or platform updates worth knowing.</li>
+            <li><strong>Why does it matter?</strong> — What this means for your business specifically.</li>
+            <li><strong>What should you do next?</strong> — A clear, concrete action you can take this week.</li>
+          </ul>
+          <p>
+            If you want the short version every week, <a href="/#newsletter">subscribe to the Market Matters Brief →</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Learning paths -->
+  <section class="section-pad bg-slate-50">
+    <div class="site-container">
+      <h2 class="text-3xl font-bold text-slate-900 mb-2">Pick Your Path</h2>
+      <p class="text-slate-600 mb-10">Where are you in your marketing journey right now?</p>
+
+      <div class="grid gap-12">
+        {paths.map(path => (
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <span class="text-3xl">{path.icon}</span>
+              <div>
+                <h3 class="text-xl font-bold text-slate-900">{path.title}</h3>
+                <p class="text-slate-600 text-sm">{path.description}</p>
+              </div>
+            </div>
+            {path.posts.length > 0 ? (
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {path.posts.map(post => (
+                  <PostCard post={post} />
+                ))}
+              </div>
+            ) : (
+              <p class="text-slate-500 text-sm italic">Posts coming soon.</p>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="section-pad bg-white">
+    <div class="site-container">
+      <NewsletterSignup variant="inline" />
+    </div>
+  </section>
+</PageLayout>

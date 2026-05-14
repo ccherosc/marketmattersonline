@@ -1,0 +1,135 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import AffiliateDisclaimer from '../components/AffiliateDisclaimer.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const toolPosts = allPosts
+  .filter(p => p.data.category === 'tools-reviews')
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const featuredTools = [
+  {
+    name: 'GoHighLevel',
+    category: 'CRM & Marketing Automation',
+    description: 'All-in-one platform for agencies and local businesses. CRM, funnels, email, SMS, and automation in one place.',
+    pros: ['Everything in one platform', 'White-label ready', 'Great for agencies'],
+    cons: ['Learning curve', 'Overkill for solo operators'],
+    bestFor: 'Agencies, consultants, local service businesses',
+    rating: 4.5,
+    href: '#',
+    affiliate: true,
+  },
+  {
+    name: 'HubSpot (Free CRM)',
+    category: 'CRM',
+    description: 'Industry-leading CRM with a solid free tier. Great starting point for small businesses managing contacts and pipeline.',
+    pros: ['Generous free plan', 'Easy to use', 'Great integrations'],
+    cons: ['Paid features get expensive fast', 'Can feel bloated'],
+    bestFor: 'Small businesses just starting with CRM',
+    rating: 4.3,
+    href: '#',
+    affiliate: false,
+  },
+  {
+    name: 'Beehiiv',
+    category: 'Newsletter Platform',
+    description: 'The best newsletter platform for monetized content businesses. Built for growth with built-in referrals and sponsorships.',
+    pros: ['Clean writing experience', 'Built-in monetization', 'Great analytics'],
+    cons: ['Smaller ecosystem than Mailchimp', 'Limited landing page customization'],
+    bestFor: 'Content creators, bloggers, newsletter businesses',
+    rating: 4.7,
+    href: '#',
+    affiliate: true,
+  },
+];
+
+const breadcrumbs = [{ label: 'Tools & Reviews' }];
+---
+
+<PageLayout
+  title="Tools & Reviews — Market Matters Online"
+  description="Honest reviews of marketing tools, CRMs, AI platforms, and software. We test them so you know what's actually worth your money."
+  breadcrumbs={breadcrumbs}
+>
+  <section class="bg-slate-900 text-white py-14">
+    <div class="site-container">
+      <div class="max-w-2xl">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Tools & Reviews</h1>
+        <p class="text-xl text-slate-300">
+          Honest, tested reviews of marketing software, CRMs, AI tools, and platforms. We tell you what's worth it and what isn't.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad bg-white">
+    <div class="site-container">
+      <div class="mb-6">
+        <AffiliateDisclaimer />
+      </div>
+
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Featured Tool Reviews</h2>
+      <div class="grid gap-6 mb-14">
+        {featuredTools.map(tool => (
+          <div class="card p-6">
+            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+              <div>
+                <div class="flex items-center gap-3 mb-1">
+                  <h3 class="text-xl font-bold text-slate-900">{tool.name}</h3>
+                  {tool.affiliate && (
+                    <span class="text-xs px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full font-medium">Affiliate</span>
+                  )}
+                </div>
+                <span class="text-xs font-semibold text-blue-600 uppercase tracking-wide">{tool.category}</span>
+              </div>
+              <div class="flex items-center gap-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <svg
+                    class={`w-4 h-4 ${i < Math.floor(tool.rating) ? 'text-amber-400' : 'text-slate-300'}`}
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+                <span class="text-sm text-slate-600 ml-1">{tool.rating}/5</span>
+              </div>
+            </div>
+            <p class="text-slate-600 mb-4">{tool.description}</p>
+            <div class="grid md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <p class="text-xs font-semibold text-emerald-600 uppercase mb-1">Pros</p>
+                <ul class="text-sm text-slate-600 space-y-1">
+                  {tool.pros.map(pro => <li class="flex items-start gap-1"><span class="text-emerald-500">✓</span>{pro}</li>)}
+                </ul>
+              </div>
+              <div>
+                <p class="text-xs font-semibold text-red-500 uppercase mb-1">Cons</p>
+                <ul class="text-sm text-slate-600 space-y-1">
+                  {tool.cons.map(con => <li class="flex items-start gap-1"><span class="text-red-400">✗</span>{con}</li>)}
+                </ul>
+              </div>
+              <div>
+                <p class="text-xs font-semibold text-slate-500 uppercase mb-1">Best For</p>
+                <p class="text-sm text-slate-600">{tool.bestFor}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {toolPosts.length > 0 && (
+        <div>
+          <h2 class="text-2xl font-bold text-slate-900 mb-6">All Tool Reviews & Comparisons</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {toolPosts.map(post => (
+              <PostCard post={post} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+</PageLayout>

@@ -1,0 +1,62 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  primaryCta: { label: string; href: string };
+  secondaryCta?: { label: string; href: string };
+  variant?: 'dark' | 'blue' | 'light';
+}
+
+const {
+  title,
+  description,
+  primaryCta,
+  secondaryCta,
+  variant = 'dark',
+} = Astro.props;
+---
+
+{variant === 'dark' && (
+  <section class="bg-slate-900 py-14">
+    <div class="site-container text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-3">{title}</h2>
+      {description && <p class="text-slate-300 text-lg mb-8 max-w-2xl mx-auto">{description}</p>}
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href={primaryCta.href} class="btn-primary">{primaryCta.label}</a>
+        {secondaryCta && (
+          <a href={secondaryCta.href} class="btn-ghost-white">{secondaryCta.label}</a>
+        )}
+      </div>
+    </div>
+  </section>
+)}
+
+{variant === 'blue' && (
+  <section class="bg-blue-600 py-14">
+    <div class="site-container text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-3">{title}</h2>
+      {description && <p class="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">{description}</p>}
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href={primaryCta.href} class="btn-white">{primaryCta.label}</a>
+        {secondaryCta && (
+          <a href={secondaryCta.href} class="btn-ghost-white">{secondaryCta.label}</a>
+        )}
+      </div>
+    </div>
+  </section>
+)}
+
+{variant === 'light' && (
+  <section class="bg-slate-50 border-y border-slate-200 py-14">
+    <div class="site-container text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-3">{title}</h2>
+      {description && <p class="text-slate-600 text-lg mb-8 max-w-2xl mx-auto">{description}</p>}
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href={primaryCta.href} class="btn-primary">{primaryCta.label}</a>
+        {secondaryCta && (
+          <a href={secondaryCta.href} class="btn-secondary">{secondaryCta.label}</a>
+        )}
+      </div>
+    </div>
+  </section>
+)}

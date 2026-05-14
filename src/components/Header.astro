@@ -1,0 +1,107 @@
+---
+const currentPath = Astro.url.pathname;
+
+const navLinks = [
+  { href: '/blog/', label: 'Blog' },
+  { href: '/start-here/', label: 'Start Here' },
+  { href: '/tools-reviews/', label: 'Tools & Reviews' },
+  { href: '/about/', label: 'About' },
+];
+
+function isActive(href: string): boolean {
+  if (href === '/') return currentPath === '/';
+  return currentPath.startsWith(href);
+}
+---
+
+<header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+  <div class="site-container">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2 group">
+        <div class="w-8 h-8 bg-slate-900 rounded-md flex items-center justify-center flex-shrink-0">
+          <span class="text-blue-400 font-black text-xs">MM</span>
+        </div>
+        <div class="leading-tight">
+          <span class="font-bold text-slate-900 text-sm tracking-tight">Market Matters</span>
+          <span class="text-blue-600 font-bold text-sm tracking-tight">Online</span>
+        </div>
+      </a>
+
+      <!-- Desktop nav -->
+      <nav class="hidden md:flex items-center gap-1">
+        {navLinks.map(link => (
+          <a
+            href={link.href}
+            class={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 ${
+              isActive(link.href)
+                ? 'text-blue-600 bg-blue-50'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+
+      <!-- CTA -->
+      <div class="hidden md:block">
+        <a href="/#newsletter" class="btn-primary text-sm py-2 px-4">
+          Get the Brief →
+        </a>
+      </div>
+
+      <!-- Mobile menu button -->
+      <button
+        id="mobile-menu-btn"
+        type="button"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        class="md:hidden p-2 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+      >
+        <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 py-3">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class={`block px-3 py-2 rounded-md text-sm font-medium mb-1 transition-colors ${
+            isActive(link.href)
+              ? 'text-blue-600 bg-blue-50'
+              : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+          }`}
+        >
+          {link.label}
+        </a>
+      ))}
+      <div class="pt-3 border-t border-slate-200 mt-2">
+        <a href="/#newsletter" class="btn-primary w-full justify-center text-sm py-2">
+          Get the Weekly Brief →
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('menu-icon-open');
+  const iconClose = document.getElementById('menu-icon-close');
+
+  btn?.addEventListener('click', () => {
+    const isOpen = !menu?.classList.contains('hidden');
+    menu?.classList.toggle('hidden');
+    iconOpen?.classList.toggle('hidden');
+    iconClose?.classList.toggle('hidden');
+    btn.setAttribute('aria-expanded', String(!isOpen));
+  });
+</script>

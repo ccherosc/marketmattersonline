@@ -1,0 +1,42 @@
+---
+import type { Category } from '../data/categories';
+
+interface Props {
+  category: Category;
+  postCount?: number;
+}
+
+const { category, postCount } = Astro.props;
+
+const bgColors: Record<string, string> = {
+  'marketing-playbook': 'bg-blue-50 border-blue-200 hover:bg-blue-100',
+  'ai-automation': 'bg-purple-50 border-purple-200 hover:bg-purple-100',
+  'tools-reviews': 'bg-emerald-50 border-emerald-200 hover:bg-emerald-100',
+  'seo-search': 'bg-orange-50 border-orange-200 hover:bg-orange-100',
+  'local-growth-lab': 'bg-red-50 border-red-200 hover:bg-red-100',
+  'templates-downloads': 'bg-teal-50 border-teal-200 hover:bg-teal-100',
+  'marketing-news': 'bg-slate-50 border-slate-200 hover:bg-slate-100',
+};
+
+const colorClass = bgColors[category.slug] ?? 'bg-slate-50 border-slate-200 hover:bg-slate-100';
+---
+
+<a
+  href={`/category/${category.slug}/`}
+  class={`block rounded-xl border p-5 transition-all duration-200 group ${colorClass}`}
+>
+  <div class="flex items-start justify-between mb-3">
+    <span class="text-3xl" role="img" aria-label={category.name}>{category.icon}</span>
+    {postCount !== undefined && (
+      <span class="text-xs font-medium text-slate-500 bg-white rounded-full px-2 py-0.5 border border-slate-200">
+        {postCount} {postCount === 1 ? 'post' : 'posts'}
+      </span>
+    )}
+  </div>
+  <h3 class="font-bold text-slate-900 mb-1 group-hover:text-blue-700 transition-colors">
+    {category.name}
+  </h3>
+  <p class="text-sm text-slate-600 leading-relaxed">
+    {category.description}
+  </p>
+</a>

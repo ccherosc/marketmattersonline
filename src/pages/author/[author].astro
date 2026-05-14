@@ -1,0 +1,69 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+  const authorMap: Record<string, { name: string; slug: string }> = {};
+
+  for (const post of allPosts) {
+    const name = post.data.author;
+    const slug = name.toLowerCase().replace(/\s+/g, '-');
+    authorMap[slug] = { name, slug };
+  }
+
+  return Object.values(authorMap).map(({ name, slug }) => ({
+    params: { author: slug },
+    props: {
+      authorName: name,
+      posts: allPosts
+        .filter(p => p.data.author === name)
+        .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+    },
+  }));
+}
+
+const { authorName, posts } = Astro.props;
+const breadcrumbs = [{ label: 'Author' }, { label: authorName }];
+---
+
+<PageLayout
+  title={`${authorName} — Market Matters Online`}
+  description={`Posts written by ${authorName} on Market Matters Online.`}
+  breadcrumbs={breadcrumbs}
+>
+  <section class="bg-slate-900 text-white py-14">
+    <div class="site-container">
+      <div class="flex items-center gap-6">
+        <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+          <span class="text-white font-bold text-2xl">
+            {authorName.split(' ').map((n: string) => n[0]).join('').slice(0, 2)}
+          </span>
+        </div>
+        <div>
+          <p class="text-slate-400 text-sm mb-1">Author</p>
+          <h1 class="text-3xl md:text-4xl font-bold">{authorName}</h1>
+          <p class="text-slate-300 mt-2">
+            Marketing strategist writing about practical tactics, AI tools, and growth systems.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad bg-white">
+    <div class="site-container">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-2xl font-bold text-slate-900">
+          {posts.length} {posts.length === 1 ? 'Post' : 'Posts'}
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {posts.map(post => (
+          <PostCard post={post} />
+        ))}
+      </div>
+    </div>
+  </section>
+</PageLayout>

@@ -1,0 +1,45 @@
+---
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+
+const siteUrl = 'https://marketmattersonline.com';
+const allItems = [{ label: 'Home', href: '/' }, ...items];
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: allItems.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.label,
+    ...(item.href ? { item: new URL(item.href, siteUrl).href } : {}),
+  })),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+<nav aria-label="Breadcrumb">
+  <ol class="flex items-center flex-wrap gap-1 text-sm text-slate-500">
+    {allItems.map((item, index) => (
+      <li class="flex items-center gap-1">
+        {index > 0 && <span class="text-slate-300" aria-hidden="true">/</span>}
+        {item.href && index < allItems.length - 1 ? (
+          <a href={item.href} class="hover:text-blue-600 transition-colors">{item.label}</a>
+        ) : (
+          <span class={index === allItems.length - 1 ? 'text-slate-700 font-medium truncate max-w-[200px]' : ''} aria-current={index === allItems.length - 1 ? 'page' : undefined}>
+            {item.label}
+          </span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>

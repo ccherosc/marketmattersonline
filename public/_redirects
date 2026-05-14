@@ -1,0 +1,6 @@
+# Cloudflare Pages redirects
+# Add any URL redirects here
+# Format: /old-path /new-path 301
+
+/feed /rss.xml 301
+/feed.xml /rss.xml 301

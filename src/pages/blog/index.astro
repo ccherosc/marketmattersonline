@@ -1,0 +1,63 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { categories, getCategoryName } from '../../data/categories';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const postsByCategory: Record<string, number> = {};
+for (const post of allPosts) {
+  postsByCategory[post.data.category] = (postsByCategory[post.data.category] ?? 0) + 1;
+}
+
+const breadcrumbs = [{ label: 'Blog' }];
+---
+
+<PageLayout
+  title="Blog — All Posts"
+  description="Marketing tactics, AI tools, SEO guides, and growth strategies. Practical content for small business marketers who need results."
+  breadcrumbs={breadcrumbs}
+>
+  <div class="site-container section-pad">
+    <div class="mb-10">
+      <h1 class="text-4xl font-bold text-slate-900 mb-3">All Posts</h1>
+      <p class="text-xl text-slate-600">
+        Practical marketing guides, tool reviews, and growth tactics — no fluff.
+      </p>
+    </div>
+
+    <!-- Category filter -->
+    <div class="flex flex-wrap gap-2 mb-10">
+      <a href="/blog/" class="px-4 py-2 rounded-full text-sm font-medium bg-slate-900 text-white">
+        All
+      </a>
+      {categories.map(cat => (
+        <a
+          href={`/category/${cat.slug}/`}
+          class="px-4 py-2 rounded-full text-sm font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors"
+        >
+          {cat.name}
+          {postsByCategory[cat.slug] && (
+            <span class="ml-1.5 text-xs text-slate-500">({postsByCategory[cat.slug]})</span>
+          )}
+        </a>
+      ))}
+    </div>
+
+    <!-- Post grid -->
+    {sortedPosts.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sortedPosts.map(post => (
+          <PostCard post={post} />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-20 text-slate-500">
+        <p class="text-lg font-medium">No posts yet.</p>
+        <p class="mt-2">Check back soon — we publish weekly.</p>
+      </div>
+    )}
+  </div>
+</PageLayout>

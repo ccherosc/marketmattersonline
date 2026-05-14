@@ -1,0 +1,84 @@
+---
+const currentYear = new Date().getFullYear();
+
+const footerLinks = {
+  Site: [
+    { href: '/', label: 'Home' },
+    { href: '/blog/', label: 'Blog' },
+    { href: '/start-here/', label: 'Start Here' },
+    { href: '/tools-reviews/', label: 'Tools & Reviews' },
+    { href: '/about/', label: 'About' },
+  ],
+  Categories: [
+    { href: '/category/marketing-playbook/', label: 'Marketing Playbook' },
+    { href: '/category/ai-automation/', label: 'AI & Automation' },
+    { href: '/category/tools-reviews/', label: 'Tools & Reviews' },
+    { href: '/category/local-growth-lab/', label: 'Local Growth Lab' },
+    { href: '/category/seo-search/', label: 'SEO & Search' },
+  ],
+  Resources: [
+    { href: '/category/templates-downloads/', label: 'Free Templates' },
+    { href: '/rss.xml', label: 'RSS Feed' },
+    { href: '/#newsletter', label: 'Newsletter' },
+  ],
+  Legal: [
+    { href: '/privacy-policy/', label: 'Privacy Policy' },
+    { href: '/affiliate-disclosure/', label: 'Affiliate Disclosure' },
+  ],
+};
+---
+
+<footer class="bg-slate-900 text-slate-400">
+  <div class="site-container py-12">
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-10">
+      <!-- Brand -->
+      <div class="col-span-2 md:col-span-1">
+        <a href="/" class="flex items-center gap-2 mb-4">
+          <div class="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center flex-shrink-0">
+            <span class="text-white font-black text-xs">MM</span>
+          </div>
+          <span class="text-white font-bold text-sm">Market Matters<br>Online</span>
+        </a>
+        <p class="text-sm text-slate-500 leading-relaxed">
+          Marketing moves fast. We make it usable.
+        </p>
+        <a
+          href="/#newsletter"
+          class="mt-4 inline-flex items-center text-sm text-blue-400 hover:text-blue-300 font-medium transition-colors"
+        >
+          Get the weekly brief →
+        </a>
+      </div>
+
+      <!-- Nav columns -->
+      {Object.entries(footerLinks).map(([group, links]) => (
+        <div>
+          <h3 class="text-white font-semibold text-sm mb-3">{group}</h3>
+          <ul class="space-y-2">
+            {links.map(link => (
+              <li>
+                <a
+                  href={link.href}
+                  class="text-sm text-slate-500 hover:text-slate-300 transition-colors"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="border-t border-slate-800 pt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+      <p class="text-xs text-slate-600">
+        &copy; {currentYear} Market Matters Online. All rights reserved.
+      </p>
+      <p class="text-xs text-slate-600 max-w-md text-right">
+        Some links on this site are affiliate links. We may earn a commission at no extra cost to you.
+        <a href="/affiliate-disclosure/" class="text-slate-500 hover:text-slate-400 underline ml-1">Learn more.</a>
+      </p>
+    </div>
+  </div>
+</footer>

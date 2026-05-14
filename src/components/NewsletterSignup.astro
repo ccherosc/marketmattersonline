@@ -1,0 +1,100 @@
+---
+interface Props {
+  variant?: 'hero' | 'inline' | 'banner';
+  title?: string;
+  description?: string;
+}
+
+const {
+  variant = 'inline',
+  title = 'Get the weekly Market Matters Brief',
+  description = 'One trend, one tactic, one tool, and one practical action step every week. No fluff. Unsubscribe anytime.',
+} = Astro.props;
+
+// Replace this action URL with your ConvertKit / Beehiiv / Mailchimp endpoint
+// ConvertKit example: https://app.convertkit.com/forms/FORM_ID/subscriptions
+// Beehiiv example:    https://www.beehiiv.com/subscribe/PUBLICATION_ID
+const FORM_ACTION = 'https://app.convertkit.com/forms/YOUR_FORM_ID/subscriptions';
+---
+
+{variant === 'banner' ? (
+  <section id="newsletter" class="bg-blue-600 py-16">
+    <div class="site-container">
+      <div class="max-w-2xl mx-auto text-center">
+        <p class="text-blue-200 text-sm font-semibold uppercase tracking-wide mb-2">Free Weekly Newsletter</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">{title}</h2>
+        <p class="text-blue-100 text-lg mb-8">{description}</p>
+        <form
+          action={FORM_ACTION}
+          method="post"
+          class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+        >
+          <input
+            type="email"
+            name="email_address"
+            required
+            placeholder="your@email.com"
+            class="flex-1 px-4 py-3 rounded-lg text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-white"
+          />
+          <button
+            type="submit"
+            class="px-6 py-3 bg-slate-900 text-white rounded-lg font-semibold text-sm hover:bg-slate-800 transition-colors whitespace-nowrap"
+          >
+            Subscribe Free →
+          </button>
+        </form>
+        <p class="text-blue-200 text-xs mt-3">Join thousands of practical marketers. No spam, ever.</p>
+      </div>
+    </div>
+  </section>
+) : variant === 'hero' ? (
+  <form
+    action={FORM_ACTION}
+    method="post"
+    class="flex flex-col sm:flex-row gap-3 max-w-md"
+  >
+    <input
+      type="email"
+      name="email_address"
+      required
+      placeholder="your@email.com"
+      class="flex-1 px-4 py-3 rounded-lg text-slate-900 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+    />
+    <button
+      type="submit"
+      class="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold text-sm hover:bg-blue-700 transition-colors whitespace-nowrap"
+    >
+      Get the Brief →
+    </button>
+  </form>
+) : (
+  <div class="bg-white rounded-2xl border border-slate-200 p-8 max-w-2xl mx-auto text-center">
+    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+    </div>
+    <h3 class="text-2xl font-bold text-slate-900 mb-2">{title}</h3>
+    <p class="text-slate-600 mb-6">{description}</p>
+    <form
+      action={FORM_ACTION}
+      method="post"
+      class="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto"
+    >
+      <input
+        type="email"
+        name="email_address"
+        required
+        placeholder="your@email.com"
+        class="flex-1 px-4 py-3 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <button
+        type="submit"
+        class="btn-primary text-sm py-3 whitespace-nowrap"
+      >
+        Subscribe Free →
+      </button>
+    </form>
+    <p class="text-xs text-slate-400 mt-3">No spam. Unsubscribe with one click.</p>
+  </div>
+)}

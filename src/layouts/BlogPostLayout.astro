@@ -1,0 +1,116 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import AffiliateDisclaimer from '../components/AffiliateDisclaimer.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+import { getCategoryName, getCategoryBadgeClass } from '../data/categories';
+import { formatDate, formatISODate } from '../utils/formatDate';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, updatedDate, category, tags, author, affiliate, heroImage, readTime } = post.data;
+
+const breadcrumbs = [
+  { label: 'Blog', href: '/blog/' },
+  { label: getCategoryName(category), href: `/category/${category}/` },
+  { label: title },
+];
+
+const categoryName = getCategoryName(category);
+const badgeClass = getCategoryBadgeClass(category);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={heroImage}
+  type="article"
+  pubDate={pubDate}
+  updatedDate={updatedDate}
+  author={author}
+  tags={tags}
+>
+  <!-- Breadcrumb -->
+  <div class="bg-slate-50 border-b border-slate-200">
+    <div class="site-container py-3">
+      <Breadcrumb items={breadcrumbs} />
+    </div>
+  </div>
+
+  <!-- Article header -->
+  <header class="site-container-narrow pt-10 pb-6">
+    <div class="flex items-center gap-3 mb-4">
+      <a href={`/category/${category}/`} class={`category-badge ${badgeClass}`}>
+        {categoryName}
+      </a>
+      {readTime && <span class="text-sm text-slate-500">{readTime}</span>}
+    </div>
+
+    <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight mb-4 text-balance">
+      {title}
+    </h1>
+
+    <p class="text-xl text-slate-600 mb-6">{description}</p>
+
+    <div class="flex items-center gap-4 text-sm text-slate-500 pb-6 border-b border-slate-200">
+      <span>By <strong class="text-slate-700">{author}</strong></span>
+      <span>·</span>
+      <time datetime={formatISODate(pubDate)}>{formatDate(pubDate)}</time>
+      {updatedDate && (
+        <>
+          <span>·</span>
+          <span>Updated <time datetime={formatISODate(updatedDate)}>{formatDate(updatedDate)}</time></span>
+        </>
+      )}
+    </div>
+  </header>
+
+  <!-- Hero image -->
+  {heroImage && (
+    <div class="site-container-narrow mb-8">
+      <img
+        src={heroImage}
+        alt={title}
+        class="w-full aspect-video object-cover rounded-xl"
+        loading="eager"
+      />
+    </div>
+  )}
+
+  {affiliate && (
+    <div class="site-container-narrow mb-6">
+      <AffiliateDisclaimer />
+    </div>
+  )}
+
+  <!-- Article content -->
+  <article class="site-container-narrow pb-12">
+    <div class="prose prose-slate prose-lg max-w-none">
+      <slot />
+    </div>
+
+    <!-- Tags -->
+    {tags.length > 0 && (
+      <div class="mt-10 pt-6 border-t border-slate-200">
+        <div class="flex flex-wrap gap-2">
+          {tags.map(tag => (
+            <span class="text-xs font-medium px-3 py-1 bg-slate-100 text-slate-600 rounded-full">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      </div>
+    )}
+  </article>
+
+  <!-- Newsletter -->
+  <div class="bg-slate-50 border-t border-slate-200">
+    <div class="site-container py-12">
+      <NewsletterSignup variant="inline" />
+    </div>
+  </div>
+</BaseLayout>

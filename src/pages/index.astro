@@ -1,0 +1,203 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import CategoryCard from '../components/CategoryCard.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+import { getCollection } from 'astro:content';
+import { featuredCategories } from '../data/categories';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const latestPosts = sortedPosts.slice(0, 6);
+const featuredPosts = sortedPosts.filter(p => p.data.featured).slice(0, 3);
+const guidePosts = featuredPosts.length > 0 ? featuredPosts : sortedPosts.slice(0, 3);
+---
+
+<BaseLayout
+  title="Market Matters Online"
+  description="Simple marketing tactics, AI tools, software reviews, and growth strategies for people who need results without the fluff."
+>
+
+  <!-- HERO -->
+  <section class="bg-slate-900 text-white py-20 lg:py-28 relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(37,99,235,0.15)_0%,_transparent_60%)] pointer-events-none"></div>
+    <div class="site-container relative">
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 bg-blue-600/20 border border-blue-500/30 text-blue-300 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
+          <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
+          Weekly Marketing Intelligence
+        </div>
+        <h1 class="text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-[1.05] tracking-tight mb-6">
+          Marketing moves fast.<br>
+          <span class="text-blue-400">We make it usable.</span>
+        </h1>
+        <p class="text-xl text-slate-300 mb-10 max-w-2xl leading-relaxed">
+          Simple marketing tactics, AI tools, software reviews, and growth strategies for people who need results without the fluff.
+        </p>
+        <div class="flex flex-wrap gap-4 mb-10">
+          <a href="#newsletter" class="btn-primary text-base px-7 py-3.5">
+            Get the Weekly Brief →
+          </a>
+          <a href="/start-here/" class="btn-ghost-white text-base px-7 py-3.5">
+            Start Here
+          </a>
+        </div>
+        <div class="flex items-center gap-6 text-sm text-slate-500">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg>
+            <span>Free weekly newsletter</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            <span>No fluff, ever</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            <span>Unsubscribe anytime</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER SIGNUP -->
+  <section id="newsletter" class="bg-blue-600 py-16">
+    <div class="site-container">
+      <div class="max-w-2xl mx-auto text-center">
+        <p class="text-blue-200 text-sm font-semibold uppercase tracking-wide mb-2">Free Weekly Newsletter</p>
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-3">Get the Market Matters Brief</h2>
+        <p class="text-blue-100 text-lg mb-8">
+          One trend, one tactic, one tool, and one practical action step — every week.
+        </p>
+        <NewsletterSignup variant="hero" />
+        <p class="text-blue-200 text-xs mt-4">Thousands of practical marketers read this every week. No spam, ever.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED CATEGORIES -->
+  <section class="section-pad bg-white">
+    <div class="site-container">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="text-3xl font-bold text-slate-900">Explore by Topic</h2>
+          <p class="text-slate-600 mt-1">Find exactly what you need for your marketing situation.</p>
+        </div>
+        <a href="/blog/" class="hidden sm:flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium text-sm">
+          All posts →
+        </a>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {featuredCategories.map(cat => (
+          <CategoryCard category={cat} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- LATEST POSTS -->
+  <section class="section-pad bg-slate-50">
+    <div class="site-container">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="text-3xl font-bold text-slate-900">Latest from the Blog</h2>
+          <p class="text-slate-600 mt-1">Fresh tactics, guides, and breakdowns — updated regularly.</p>
+        </div>
+        <a href="/blog/" class="hidden sm:flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium text-sm">
+          View all →
+        </a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {latestPosts.map(post => (
+          <PostCard post={post} />
+        ))}
+      </div>
+      <div class="mt-8 text-center sm:hidden">
+        <a href="/blog/" class="btn-secondary">View all posts →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOST USEFUL GUIDES -->
+  {guidePosts.length > 0 && (
+    <section class="section-pad bg-white">
+      <div class="site-container">
+        <div class="mb-8">
+          <span class="text-sm font-semibold text-blue-600 uppercase tracking-wide">Start Here</span>
+          <h2 class="text-3xl font-bold text-slate-900 mt-1">Most Useful Guides</h2>
+          <p class="text-slate-600 mt-1">The guides our readers keep coming back to.</p>
+        </div>
+        <div class="grid gap-6">
+          {guidePosts.map(post => (
+            <PostCard post={post} variant="featured" />
+          ))}
+        </div>
+        <div class="mt-6">
+          <a href="/start-here/" class="btn-secondary">See the full Start Here guide →</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- FREE DOWNLOAD CTA -->
+  <section class="bg-slate-900 py-16">
+    <div class="site-container">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-5">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-3">
+          Free Download: Local Marketing Quickstart Checklist
+        </h2>
+        <p class="text-slate-300 text-lg mb-8 max-w-xl mx-auto">
+          The exact steps to get your local business found online — Google Business Profile, local SEO, and your first 10 leads.
+        </p>
+        <a href="/#newsletter" class="btn-primary text-base px-8 py-3.5">
+          Download Free → (Join the newsletter)
+        </a>
+        <p class="text-slate-500 text-sm mt-3">Delivered to your inbox instantly when you subscribe.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHOW ME RESULTS ONLY SOFT CTA -->
+  <section class="section-pad bg-white border-b border-slate-200">
+    <div class="site-container">
+      <div class="max-w-3xl mx-auto bg-slate-50 rounded-2xl border border-slate-200 p-8 md:p-10">
+        <div class="flex flex-col md:flex-row md:items-center gap-6">
+          <div class="flex-1">
+            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wide">Our Consulting Arm</span>
+            <h2 class="text-2xl font-bold text-slate-900 mt-1 mb-3">
+              Need help turning strategy into leads?
+            </h2>
+            <p class="text-slate-600 leading-relaxed">
+              Show Me Results Only helps small businesses turn marketing ideas into measurable action — with real campaigns, real systems, and results you can track.
+            </p>
+          </div>
+          <div class="flex-shrink-0">
+            <a
+              href="https://showmeresultsonly.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-primary whitespace-nowrap"
+            >
+              Visit ShowMeResultsOnly.com →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING POSITIONING -->
+  <section class="py-10 bg-white">
+    <div class="site-container text-center">
+      <p class="text-slate-500 text-base max-w-xl mx-auto">
+        Built for <strong class="text-slate-700">practical marketers</strong>, <strong class="text-slate-700">business owners</strong>, and <strong class="text-slate-700">teams</strong> who need smarter growth — without the noise.
+      </p>
+    </div>
+  </section>
+
+</BaseLayout>

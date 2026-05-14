@@ -1,0 +1,77 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+
+const breadcrumbs = [{ label: 'About' }];
+---
+
+<PageLayout
+  title="About — Market Matters Online"
+  description="Market Matters Online is a marketing blog and newsletter for practical marketers, business owners, and teams who need smarter growth."
+  breadcrumbs={breadcrumbs}
+>
+  <section class="bg-slate-900 text-white py-14">
+    <div class="site-container">
+      <div class="max-w-2xl">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">About Market Matters Online</h1>
+        <p class="text-xl text-slate-300">
+          We started this because marketing advice is everywhere — useful marketing advice isn't.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad bg-white">
+    <div class="site-container">
+      <div class="max-w-3xl mx-auto">
+        <div class="prose prose-slate prose-lg max-w-none">
+          <h2>Why we built this</h2>
+          <p>
+            Marketing moves fast. AI tools, algorithm changes, new platforms, new tactics — it never stops. The problem isn't access to information. It's that most marketing content is either too vague to act on, too advanced for most businesses to implement, or just noise designed to rank on Google.
+          </p>
+          <p>
+            Market Matters Online exists to solve that. Every piece of content here is written with one question in mind: <strong>"What would a smart business owner actually do with this?"</strong>
+          </p>
+
+          <h2>Who this is for</h2>
+          <ul>
+            <li><strong>Small business owners</strong> who handle their own marketing but don't have time to read 10 articles to find one useful tip.</li>
+            <li><strong>Marketing teams at small companies</strong> who need to stay current without getting distracted by hype.</li>
+            <li><strong>Local service businesses</strong> (contractors, consultants, healthcare, home services) that want more leads from their online presence.</li>
+            <li><strong>Freelancers and consultants</strong> who need tools and tactics to grow their own practice.</li>
+          </ul>
+
+          <h2>What we cover</h2>
+          <p>We write about:</p>
+          <ul>
+            <li><strong>Marketing strategy and tactics</strong> — frameworks and playbooks you can actually implement</li>
+            <li><strong>AI & automation tools</strong> — honest assessments of what's worth using and what's hype</li>
+            <li><strong>Software reviews and comparisons</strong> — CRMs, email platforms, SEO tools, social media tools</li>
+            <li><strong>Local marketing and SEO</strong> — getting found on Google Maps, improving local rankings</li>
+            <li><strong>Lead generation systems</strong> — building repeatable pipelines that don't depend on you posting every day</li>
+          </ul>
+
+          <h2>Our standards</h2>
+          <p>
+            We only recommend tools we've actually used or tested. When we review software, we say what doesn't work, not just what does. When we have affiliate relationships with a tool, we disclose it clearly.
+          </p>
+          <p>
+            We don't publish content just to fill a calendar. We publish when we have something worth saying.
+          </p>
+
+          <h2>The consulting side</h2>
+          <p>
+            Market Matters Online is the content arm. <a href="https://showmeresultsonly.com" target="_blank" rel="noopener">Show Me Results Only</a> is our consulting practice — where we work directly with small businesses to build and run their marketing systems.
+          </p>
+          <p>
+            If you want to read and learn on your own, this is the place. If you want someone to build it with you, that's what we do at Show Me Results Only.
+          </p>
+        </div>
+
+        <div class="mt-12 pt-12 border-t border-slate-200">
+          <NewsletterSignup variant="inline" />
+        </div>
+      </div>
+    </div>
+  </section>
+</PageLayout>

@@ -11,10 +11,7 @@ const {
   description = 'One trend, one tactic, one tool, and one practical action step every week. No fluff. Unsubscribe anytime.',
 } = Astro.props;
 
-// Replace this action URL with your ConvertKit / Beehiiv / Mailchimp endpoint
-// ConvertKit example: https://app.convertkit.com/forms/FORM_ID/subscriptions
-// Beehiiv example:    https://www.beehiiv.com/subscribe/PUBLICATION_ID
-const FORM_ACTION = 'https://app.convertkit.com/forms/YOUR_FORM_ID/subscriptions';
+const SUBSCRIBE_URL = 'https://marketmattersonline.beehiiv.com/subscribe';
 ---
 
 {variant === 'banner' ? (
@@ -24,49 +21,29 @@ const FORM_ACTION = 'https://app.convertkit.com/forms/YOUR_FORM_ID/subscriptions
         <p class="text-blue-200 text-sm font-semibold uppercase tracking-wide mb-2">Free Weekly Newsletter</p>
         <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">{title}</h2>
         <p class="text-blue-100 text-lg mb-8">{description}</p>
-        <form
-          action={FORM_ACTION}
-          method="post"
-          class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+        <a
+          href={SUBSCRIBE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-8 py-3.5 bg-slate-900 text-white rounded-lg font-semibold text-sm hover:bg-slate-800 transition-colors"
         >
-          <input
-            type="email"
-            name="email_address"
-            required
-            placeholder="your@email.com"
-            class="flex-1 px-4 py-3 rounded-lg text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-white"
-          />
-          <button
-            type="submit"
-            class="px-6 py-3 bg-slate-900 text-white rounded-lg font-semibold text-sm hover:bg-slate-800 transition-colors whitespace-nowrap"
-          >
-            Subscribe Free →
-          </button>
-        </form>
+          Subscribe Free →
+        </a>
         <p class="text-blue-200 text-xs mt-3">Join thousands of practical marketers. No spam, ever.</p>
       </div>
     </div>
   </section>
 ) : variant === 'hero' ? (
-  <form
-    action={FORM_ACTION}
-    method="post"
-    class="flex flex-col sm:flex-row gap-3 max-w-md"
-  >
-    <input
-      type="email"
-      name="email_address"
-      required
-      placeholder="your@email.com"
-      class="flex-1 px-4 py-3 rounded-lg text-slate-900 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-    />
-    <button
-      type="submit"
+  <div class="flex flex-col sm:flex-row gap-2.5 items-start">
+    <a
+      href={SUBSCRIBE_URL}
+      target="_blank"
+      rel="noopener noreferrer"
       class="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold text-sm hover:bg-blue-700 transition-colors whitespace-nowrap"
     >
       Get the Brief →
-    </button>
-  </form>
+    </a>
+  </div>
 ) : (
   <div class="bg-white rounded-2xl border border-slate-200 p-8 max-w-2xl mx-auto text-center">
     <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -76,25 +53,14 @@ const FORM_ACTION = 'https://app.convertkit.com/forms/YOUR_FORM_ID/subscriptions
     </div>
     <h3 class="text-2xl font-bold text-slate-900 mb-2">{title}</h3>
     <p class="text-slate-600 mb-6">{description}</p>
-    <form
-      action={FORM_ACTION}
-      method="post"
-      class="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto"
+    <a
+      href={SUBSCRIBE_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="btn-primary text-sm py-3 px-8"
     >
-      <input
-        type="email"
-        name="email_address"
-        required
-        placeholder="your@email.com"
-        class="flex-1 px-4 py-3 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <button
-        type="submit"
-        class="btn-primary text-sm py-3 whitespace-nowrap"
-      >
-        Subscribe Free →
-      </button>
-    </form>
+      Subscribe Free →
+    </a>
     <p class="text-xs text-slate-400 mt-3">No spam. Unsubscribe with one click.</p>
   </div>
 )}
